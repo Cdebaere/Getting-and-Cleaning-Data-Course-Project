@@ -6,21 +6,19 @@
 # Appropriately labels the data set with descriptive variable names.
 # From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-library(dplyr)
-
 # 1. Merge the training and the test sets and training and test labels to create one data set. ---------
 
 # Read in training and test set
-train_set <- read.table(file = "./Project/train/X_train.txt")
-test_set <- read.table(file = "./Project/test/X_test.txt")
+train_set <- read.table(file = "./getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/train/X_train.txt")
+test_set <- read.table(file = "./getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/test/X_test.txt")
 
 # Read in the training and test labels
-train_labels <- read.table(file = "./Project/train/y_train.txt", col.names="class_label")
-test_labels <- read.table(file = "./Project/test/y_test.txt",col.names="class_label")
+train_labels <- read.table(file = "./getdata-projectfiles-UCI HAR Dataset/train/UCI HAR Dataset/y_train.txt", col.names="class_label")
+test_labels <- read.table(file = "./getdata-projectfiles-UCI HAR Dataset/test/UCI HAR Dataset/y_test.txt",col.names="class_label")
 
 # Read in the training and test subject set
-train_subject <- read.table(file = "./Project/train/subject_train.txt", col.names="subject")
-test_subject <- read.table(file = "./Project/test/subject_test.txt", col.names="subject")
+train_subject <- read.table(file = "./getdata-projectfiles-UCI HAR Dataset/train/UCI HAR Dataset/subject_train.txt", col.names="subject")
+test_subject <- read.table(file = "./getdata-projectfiles-UCI HAR Dataset/test/UCI HAR Dataset/subject_test.txt", col.names="subject")
 
 # Merge the two datasets by binding the rows and delete the original files
 data_set <- rbind(train_set,test_set)
@@ -35,7 +33,7 @@ rm(list=c("train_subject","test_subject"))
 # 2. Appropriately label the data set with descriptive variable names. ---------
 
 # Read in the column names and transpose
-features <- t(read.table(file = "./Project/features.txt"))[2,]
+features <- t(read.table(file = "./getdata-projectfiles-UCI HAR Dataset/test/UCI HAR Dataset/features.txt"))[2,]
 
 # match column names with the data set
 names(data_set) <- features
@@ -53,7 +51,7 @@ rm(list=c("data_labels","data_subject"))
 # 4. Use descriptive activity names to name the activities in the data set. ---------
 
 # Read in the activity labels
-activity_labels <- read.table(file = "./Project/activity_labels.txt", col.names=c("class_label","activity_name"))
+activity_labels <- read.table(file = "./getdata-projectfiles-UCI HAR Dataset/test/UCI HAR Dataset/activity_labels.txt", col.names=c("class_label","activity_name"))
 
 # Name the activities in the data set
 data_set <- merge(activity_labels, data_set, by="class_label")
@@ -62,4 +60,4 @@ data_set$class_label <- NULL
 # 5. From the data_set, create a second, independent tidy data set with the average of each variable for each activity and each subject. ---------
 
 tidy_dataset <- aggregate(. ~ activity_name + subject, data_set, function(x) mean(x))
-write.table(tidy_dataset, file = "./Project/tidy_dataset.txt")
+write.table(tidy_dataset, file = "./Course-Project/tidy_dataset.txt")
